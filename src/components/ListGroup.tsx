@@ -4,14 +4,16 @@ import React, { MouseEvent, useState } from "react";
 interface Props {
   items: string[];
   heading: string;
+  //optional(?) function prop
+  onSelectItem?: (item: string, index: number) => void;
 }
 
 //functional component ListGroup using props
-function ListGroup({ items, heading }: Props) {
+function ListGroup({ items, heading, onSelectItem }: Props) {
   //state for onClick highlight using useState hook
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
-  //message using const
+  //message using const and a prop
   const message = items.length === 0 && <p>No items to display</p>;
 
   //event handler for onClick
@@ -37,7 +39,12 @@ function ListGroup({ items, heading }: Props) {
                 : "list-group-item"
             }
             key={index}
-            onClick={() => setSelectedIndex(index)}
+            onClick={() => {
+              setSelectedIndex(index);
+              if (onSelectItem) {
+                onSelectItem(item, index);
+              }
+            }}
           >
             {item}
           </li>
