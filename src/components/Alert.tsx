@@ -4,10 +4,10 @@ import { ReactNode } from "react";
 interface AlertProps {
   children: ReactNode;
   showAlert: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Alert = ({ children, showAlert, onClick }: AlertProps) => {
+const Alert = ({ children, showAlert, onClose }: AlertProps) => {
   return (
     <div
       className={`alert alert-primary alert-dismissible fade ${showAlert}`}
@@ -19,7 +19,7 @@ const Alert = ({ children, showAlert, onClick }: AlertProps) => {
         className="btn-close"
         data-bs-dismiss="alert"
         aria-label="Close"
-        onClick={onClick}
+        onClick={onClose}
       ></button>
     </div>
   );

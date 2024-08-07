@@ -8,28 +8,28 @@ function App() {
   //array of items
   let items = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"];
   const [showAlert, setShowAlert] = useState("hide");
-  const [clicked, setClicked] = useState(true);
 
   const onSelectItem = (item: string, index: number) => {
     console.log(item + " " + index + " selected");
   };
 
   function onClick(event: React.MouseEvent<HTMLButtonElement>) {
-    console.log("Button clicked " + clicked);
-    clicked ? setClicked(false) : setClicked(true);
-    if (clicked) {
-      setShowAlert("show");
-    } else {
-      setShowAlert("hide");
-    }
+    setShowAlert("show");
+  }
+
+  function onClose(event: React.MouseEvent<HTMLButtonElement>) {
+    setShowAlert("hide");
   }
 
   //<ListGroup items={items} heading="Cities" onSelectItem={onSelectItem} />
   return (
     <div>
-      <Alert showAlert={showAlert} onClick={onClick}>
-        Alert
-      </Alert>
+      {showAlert && (
+        <Alert showAlert={showAlert} onClose={onClose}>
+          {" "}
+          Alert
+        </Alert>
+      )}
       <Button onClick={onClick}>Alert button</Button>
     </div>
   );
