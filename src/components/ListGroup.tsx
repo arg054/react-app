@@ -1,7 +1,7 @@
 import React, { MouseEvent, useState } from "react";
 
-//interface for ListGroup component
-interface Props {
+//arguments for ListGroup component
+interface ListGroupProps {
   items: string[];
   heading: string;
   //optional(?) function prop
@@ -9,7 +9,7 @@ interface Props {
 }
 
 //functional component ListGroup using props
-function ListGroup({ items, heading, onSelectItem }: Props) {
+function ListGroup({ items, heading, onSelectItem }: ListGroupProps) {
   //state for onClick highlight using useState hook
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
