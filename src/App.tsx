@@ -3,7 +3,7 @@ import Alert from "./components/Alert";
 import Button from "./components/Button";
 import ListGroup from "./components/ListGroup";
 
-//current lesson: State vs Props
+//current lesson: Vanilla CSS
 function App() {
   //array of items
   let items = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"];
@@ -21,12 +21,11 @@ function App() {
     setShowAlert("hide");
   }
 
-  //<ListGroup items={items} heading="Cities" onSelectItem={onSelectItem} />
   return (
     <div>
+      <ListGroup items={items} heading="Cities" onSelectItem={onSelectItem} />
       {showAlert && (
         <Alert showAlert={showAlert} onClose={onClose}>
-          {" "}
           Alert
         </Alert>
       )}

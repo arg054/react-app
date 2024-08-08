@@ -1,4 +1,24 @@
 import React, { MouseEvent, useState } from "react";
+import styled from "styled-components";
+
+//styled components, css in js
+const List = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+interface ListItemProps {
+  active: boolean;
+}
+
+const ListItem = styled.li<ListItemProps>`
+  padding: 5px;
+  background-color: ${(props) => (props.active ? "#f1f1f1" : "white")};
+  cursor: pointer;
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
 
 //arguments for ListGroup component
 interface ListGroupProps {
@@ -30,14 +50,10 @@ function ListGroup({ items, heading, onSelectItem }: ListGroupProps) {
     <>
       <h1>{heading}</h1>
       {message}
-      <ul className="list-group">
+      <List>
         {items.map((item, index) => (
-          <li
-            className={
-              selectedIndex === index
-                ? "list-group-item active"
-                : "list-group-item"
-            }
+          <ListItem
+            active={index === selectedIndex}
             key={index}
             onClick={() => {
               setSelectedIndex(index);
@@ -47,9 +63,9 @@ function ListGroup({ items, heading, onSelectItem }: ListGroupProps) {
             }}
           >
             {item}
-          </li>
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </>
   );
 }
