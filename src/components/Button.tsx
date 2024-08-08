@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+
 interface Props {
   children: ReactNode;
   //color prop is optional and can only be one of the following values

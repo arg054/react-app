@@ -2,8 +2,9 @@ import { useState } from "react";
 import Alert from "./components/Alert";
 import Button from "./components/Button";
 import ListGroup from "./components/ListGroup";
+import Like from "./components/Like";
 
-//current lesson: Vanilla CSS
+//current lesson: separation of concerns
 function App() {
   //array of items
   let items = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"];
@@ -23,6 +24,8 @@ function App() {
 
   return (
     <div>
+      <Like />
+      {/*
       <ListGroup items={items} heading="Cities" onSelectItem={onSelectItem} />
       {showAlert && (
         <Alert showAlert={showAlert} onClose={onClose}>
@@ -30,6 +33,7 @@ function App() {
         </Alert>
       )}
       <Button onClick={onClick}>Alert button</Button>
+      */}
     </div>
   );
 }
