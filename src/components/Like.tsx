@@ -6,7 +6,7 @@ const Like = () => {
   const [liked, setLiked] = useState(false);
 
   function onLikeClick() {
-    console.log("Like clicked " + liked);
+    console.log("Like clicked");
 
     //toggle the liked state, pass the inverse of the current state
     setLiked(!liked);

@@ -4,9 +4,55 @@ import Button from "./components/Button";
 import ListGroup from "./components/ListGroup";
 import Like from "./components/Like";
 import produce from "immer";
+import NavBar from "./components/NavBar";
+import Cart from "./components/Cart";
+import ExpandableText from "./components/ExpandableText";
 
-//current lesson:  sharing state between components
+//current lesson: Building Forms
 function App() {
+  const [game, setGame] = useState({
+    id: 1,
+    player: {
+      name: "John",
+    },
+  });
+
+  const [pizza, setPizza] = useState({
+    name: "Spicy Pepperoni",
+    toppings: ["Mushroom"],
+  });
+
+  const [cart, setCart] = useState({
+    discount: 0.1,
+    items: [
+      { id: 1, title: "Priduct 1", quantity: 1 },
+      { id: 2, title: "Priduct 2", quantity: 1 },
+    ],
+  });
+
+  const handleCartClick = () => {
+    setCart((cart) => ({
+      ...cart,
+      items: cart.items.map((item) =>
+        item.id === 1 ? { ...item, quantity: item.quantity + 1 } : item
+      ),
+    }));
+  };
+
+  const handlePizzaClick = () => {
+    setPizza({ ...pizza, toppings: [...pizza.toppings, "Cheese"] });
+  };
+
+  const handleGameClick = () => {
+    //setGame using spread operator
+    setGame({ ...game, player: { ...game.player, name: "Jane" } });
+
+    //setGame using produce
+    produce((draft) => {
+      draft.player.name = "Jane";
+    });
+  };
+
   //array of items
   let items = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"];
   const [showAlert, setShowAlert] = useState("hide");
@@ -14,6 +60,8 @@ function App() {
   const onSelectItem = (item: string, index: number) => {
     console.log(item + " " + index + " selected");
   };
+
+  const [cartItems, setCartItems] = useState(["Prduct 1", "Prduct 2"]);
 
   //array of objects
   const [bugs, setBugs] = useState([
@@ -47,7 +95,12 @@ function App() {
 
   return (
     <div>
+      <ExpandableText>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </ExpandableText>
       {/*
+      <NavBar cartItemsCount={cartItems.length} />
+      <Cart cartItems={cartItems} onClear={() => setCartItems([])} />
       <Like />
       <ListGroup items={items} heading="Cities" onSelectItem={onSelectItem} />
       {showAlert && (
