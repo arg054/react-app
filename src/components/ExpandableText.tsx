@@ -26,13 +26,15 @@ const ExpandableText = ({ children, maxChars = 100 }: ExpandableTextProps) => {
     if (showAll)
       return (
         <div>
-          {children}...{toggleButton()}
+          {children + "..."}
+          {toggleButton()}
         </div>
       );
     else {
       return (
         <div>
-          {children.substring(0, maxChars) + "..."}...{toggleButton()}
+          {children.substring(0, maxChars) + "..."}
+          {toggleButton()}
         </div>
       );
     }
