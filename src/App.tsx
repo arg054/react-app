@@ -7,8 +7,9 @@ import produce from "immer";
 import NavBar from "./components/NavBar";
 import Cart from "./components/Cart";
 import ExpandableText from "./components/ExpandableText";
+import Form from "./components/Form";
 
-//current lesson: Building Forms
+//current lesson: accessing input fields
 function App() {
   const [game, setGame] = useState({
     id: 1,
@@ -95,20 +96,11 @@ function App() {
 
   return (
     <div>
-      <ExpandableText>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia,
-        blanditiis commodi. Ex, obcaecati ipsa perspiciatis soluta reprehenderit
-        facere quos hic maiores delectus eveniet a similique sit rerum! Harum
-        quae dolore delectus recusandae beatae ut sit cupiditate, et tempore rem
-        nulla obcaecati in assumenda reprehenderit eveniet, a atque voluptatem
-        maxime. Nulla et consequuntur illum nisi. Dolor laudantium minima atque
-        animi explicabo reiciendis modi ipsum exercitationem labore facere
-        beatae optio veniam architecto, assumenda illo alias esse, fugiat
-        molestias numquam? Quis consequuntur, odio et omnis, beatae iste
-        voluptatem a, consequatur enim aspernatur totam natus eos ipsum eum ex.
-        Natus voluptas culpa consequatur dolorem!
-      </ExpandableText>
+      <Form />
       {/*
+      <ExpandableText>
+        Lorem ipsum
+      </ExpandableText>
       <NavBar cartItemsCount={cartItems.length} />
       <Cart cartItems={cartItems} onClear={() => setCartItems([])} />
       <Like />
