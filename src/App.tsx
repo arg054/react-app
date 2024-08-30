@@ -8,8 +8,9 @@ import NavBar from "./components/NavBar";
 import Cart from "./components/Cart";
 import ExpandableText from "./components/ExpandableText";
 import Form from "./components/Form";
+import ExpenseForm from "./components/ExpenseForm";
 
-//current lesson: accessing input fields
+//current lesson: applying validation
 function App() {
   const [game, setGame] = useState({
     id: 1,
@@ -96,7 +97,7 @@ function App() {
 
   return (
     <div>
-      <Form />
+      <ExpenseForm />
       {/*
       <ExpandableText>
         Lorem ipsum
