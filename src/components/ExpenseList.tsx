@@ -11,8 +11,38 @@ interface ExpenseListProps {
 }
 
 const ExpenseList = ({ expenses, onClick }: ExpenseListProps) => {
+  const [selectedCategory, setSelectedCategory] = React.useState("");
+
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  const filteredExpenses = selectedCategory
+    ? expenses.filter((expense) => expense.category === selectedCategory)
+    : expenses;
+
   return (
     <>
+      <div>
+        <label htmlFor="category">Filter by Category:</label>
+        <select
+          id="category"
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+        >
+          <option value="">All</option>
+          {Array.from(new Set(expenses.map((expense) => expense.category))).map(
+            (category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            )
+          )}
+        </select>
+      </div>
+
       <table className="table table-striped-columns">
         <thead>
           <tr>
@@ -23,7 +53,7 @@ const ExpenseList = ({ expenses, onClick }: ExpenseListProps) => {
           </tr>
         </thead>
         <tbody>
-          {expenses.map((expense) => (
+          {filteredExpenses.map((expense) => (
             <tr key={expense.id}>
               <td>{expense.description}</td>
               <td>${expense.cost}</td>
@@ -41,7 +71,10 @@ const ExpenseList = ({ expenses, onClick }: ExpenseListProps) => {
           ))}
           <td>
             Total: $
-            {expenses.reduce((total, expense) => total + expense.cost, 0)}
+            {filteredExpenses.reduce(
+              (total, expense) => total + expense.cost,
+              0
+            )}
           </td>
         </tbody>
       </table>

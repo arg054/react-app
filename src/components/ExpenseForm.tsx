@@ -98,8 +98,8 @@ const ExpenseForm = ({ onExpenseFormSubmit }: ExpenseFormProps) => {
         <select ref={catRef} id="category" className="form-select">
           <option value="">Select a category</option>
           <option value="Groceries">Groceries</option>
-          <option value="entertainment">Entertainment</option>
-          <option value="utilities">Utilities</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Utilities">Utilities</option>
         </select>
         {errors.category && (
           <div className="text-danger">{errors.category}</div>
