@@ -9,9 +9,27 @@ import Cart from "./components/Cart";
 import ExpandableText from "./components/ExpandableText";
 import Form from "./components/Form";
 import ExpenseForm from "./components/ExpenseForm";
+import ExpenseList from "./components/ExpenseList";
 
 //current lesson: applying validation
 function App() {
+  const [expenses, setExpenses] = useState<
+    { id: number; description: string; cost: number; category: string }[]
+  >([]);
+
+  const handleExpenseFormSubmit = (expense: {
+    id: number;
+    description: string;
+    cost: number;
+    category: string;
+  }) => {
+    setExpenses([...expenses, expense]);
+  };
+
+  const handleExpenseRemove = (id: number) => {
+    setExpenses(expenses.filter((expense) => expense.id !== id));
+  };
+
   const [game, setGame] = useState({
     id: 1,
     player: {
@@ -97,7 +115,8 @@ function App() {
 
   return (
     <div>
-      <ExpenseForm />
+      <ExpenseForm onExpenseFormSubmit={handleExpenseFormSubmit} />
+      <ExpenseList expenses={expenses} onClick={handleExpenseRemove} />
       {/*
       <ExpandableText>
         Lorem ipsum
