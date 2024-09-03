@@ -10,6 +10,12 @@ interface ExpenseListProps {
   onClick: (id: number) => void;
 }
 
+/**
+ * Renders a list of expenses with the ability to filter by category and delete individual expenses.
+ *
+ * @param expenses - An array of expense objects.
+ * @param onClick - A callback function triggered when a delete button is clicked.
+ */
 const ExpenseList = ({ expenses, onClick }: ExpenseListProps) => {
   const [selectedCategory, setSelectedCategory] = React.useState("");
 
