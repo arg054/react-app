@@ -114,7 +114,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <ExpenseForm onExpenseFormSubmit={handleExpenseFormSubmit} />
       <ExpenseList expenses={expenses} onClick={handleExpenseRemove} />
       {/*

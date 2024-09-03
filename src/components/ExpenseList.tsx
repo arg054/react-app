@@ -32,13 +32,13 @@ const ExpenseList = ({ expenses, onClick }: ExpenseListProps) => {
   return (
     <>
       <div>
-        <label htmlFor="category">Filter by Category:</label>
         <select
+          className="form-select"
           id="category"
           value={selectedCategory}
           onChange={handleCategoryChange}
         >
-          <option value="">All</option>
+          <option value="">All categories</option>
           {Array.from(new Set(expenses.map((expense) => expense.category))).map(
             (category) => (
               <option key={category} value={category}>
