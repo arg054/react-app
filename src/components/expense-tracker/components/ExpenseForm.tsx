@@ -1,4 +1,5 @@
 import React from "react";
+import { categiries } from "../../../App";
 
 // Define the props for the ExpenseForm component
 interface ExpenseFormProps {
@@ -97,9 +98,11 @@ const ExpenseForm = ({ onExpenseFormSubmit }: ExpenseFormProps) => {
         </label>
         <select ref={catRef} id="category" className="form-select">
           <option value="">Select a category</option>
-          <option value="Groceries">Groceries</option>
-          <option value="Entertainment">Entertainment</option>
-          <option value="Utilities">Utilities</option>
+          {categiries.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
         </select>
         {errors.category && (
           <div className="text-danger">{errors.category}</div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Alert from "./components/Alert";
 import Button from "./components/Button";
 import ListGroup from "./components/ListGroup";
@@ -10,8 +10,60 @@ import ExpandableText from "./components/expandable-text/components/ExpandableTe
 import Form from "./components/Form";
 import ExpenseForm from "./components/expense-tracker/components/ExpenseForm";
 import ExpenseList from "./components/expense-tracker/components/ExpenseList";
+import ProductList from "./components/ProductList";
+import axios, { CanceledError } from "axios";
+import { literal } from "zod";
+
+export const categiries = ["Groceries", "Entertainment", "Utilities"];
+
+interface User {
+  id: number;
+  name: string;
+}
 
 function App() {
+  const [error, setError] = useState("");
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setLoading] = useState(false);
+
+  //using effect hook to fetch data from the API
+  //always include an empty array as the second argument to prevent infinite loops
+  useEffect(() => {
+    const controller = new AbortController();
+
+    setLoading(true);
+    axios
+      .get<User[]>("https://jsonplaceholder.typicode.com/users", {
+        signal: controller.signal,
+      })
+      .then((response) => {
+        setUsers(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+        setLoading(false);
+      });
+
+    return () => controller.abort();
+  }, []);
+
+  //delete function updating users, using an optimistic update
+  const deleteUser = (user: User) => {
+    const originalUsers = [...users];
+    setUsers(users.filter((user) => user.id !== user.id));
+
+    axios
+      .delete("https://jsonplaceholder.typicode.com/users" + user.id)
+      .catch((err) => {
+        setError(err.message);
+        setUsers(originalUsers);
+      });
+  };
+
+  const [category, setCategory] = useState("");
+
   const [expenses, setExpenses] = useState<
     { id: number; description: string; cost: number; category: string }[]
   >([]);
@@ -114,10 +166,39 @@ function App() {
 
   return (
     <div style={{ padding: "20px" }}>
+      <>
+        {error && <p className="text-danger">{error}</p>}
+        {isLoading && <div className="spinner-border"></div>}
+        <ul className="list-group">
+          {users.map((user) => (
+            <li
+              key={user.id}
+              className="list-group-item d-flex justify-content-between"
+            >
+              {user.name}
+              <button
+                className="btn btn-outline-danger"
+                onClick={() => deleteUser(user)}
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      </>
+      {/*
+      <select
+        className="form-select"
+        onChange={(event) => setCategory(event.target.value)}
+      >
+        <option value=""></option>
+        <option value="Clothing">Clothing</option>
+        <option value="Household">Household</option>
+      </select>
+      <ProductList category={category} />
       <ExpenseForm onExpenseFormSubmit={handleExpenseFormSubmit} />
       <br />
       <ExpenseList expenses={expenses} onClick={handleExpenseRemove} />
-      {/*
       <ExpandableText>
         Lorem ipsum
       </ExpandableText>
