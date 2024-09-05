@@ -11,7 +11,6 @@ import Form from "./components/Form";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 
-//current lesson: applying validation
 function App() {
   const [expenses, setExpenses] = useState<
     { id: number; description: string; cost: number; category: string }[]
