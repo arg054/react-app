@@ -6,10 +6,10 @@ import Like from "./components/Like";
 import produce from "immer";
 import NavBar from "./components/NavBar";
 import Cart from "./components/Cart";
-import ExpandableText from "./components/ExpandableText";
+import ExpandableText from "./components/expandable-text/components/ExpandableText";
 import Form from "./components/Form";
-import ExpenseForm from "./components/ExpenseForm";
-import ExpenseList from "./components/ExpenseList";
+import ExpenseForm from "./components/expense-tracker/components/ExpenseForm";
+import ExpenseList from "./components/expense-tracker/components/ExpenseList";
 
 function App() {
   const [expenses, setExpenses] = useState<
@@ -115,6 +115,7 @@ function App() {
   return (
     <div style={{ padding: "20px" }}>
       <ExpenseForm onExpenseFormSubmit={handleExpenseFormSubmit} />
+      <br />
       <ExpenseList expenses={expenses} onClick={handleExpenseRemove} />
       {/*
       <ExpandableText>
