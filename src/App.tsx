@@ -12,14 +12,10 @@ import ExpenseForm from "./components/expense-tracker/components/ExpenseForm";
 import ExpenseList from "./components/expense-tracker/components/ExpenseList";
 import ProductList from "./components/ProductList";
 import { literal } from "zod";
-import apiClient, { CanceledError } from "./components/services/api-client";
+import apiClient, { CanceledError } from "./components/services/apiClient";
+import userService, { User } from "./components/services/userService";
 
 export const categiries = ["Groceries", "Entertainment", "Utilities"];
-
-interface User {
-  id: number;
-  name: string;
-}
 
 function App() {
   const [error, setError] = useState("");
@@ -32,10 +28,8 @@ function App() {
     const controller = new AbortController();
 
     setLoading(true);
-    apiClient
-      .get<User[]>("https://jsonplaceholder.typicode.com/users", {
-        signal: controller.signal,
-      })
+    const { request, cancel } = userService.getAllUsers();
+    request
       .then((response) => {
         setUsers(response.data);
         setLoading(false);
@@ -46,7 +40,7 @@ function App() {
         setLoading(false);
       });
 
-    return () => controller.abort();
+    return () => cancel();
   }, []);
 
   //delete function updating users, using an optimistic update
@@ -54,7 +48,7 @@ function App() {
     const originalUsers = [...users];
     setUsers(users.filter((u) => u.id !== user.id));
 
-    apiClient.delete("/users/" + user.id).catch((err) => {
+    userService.deleteUser(user.id).catch((err) => {
       setError(err.message);
       setUsers(originalUsers);
     });
@@ -62,16 +56,13 @@ function App() {
 
   const addUser = () => {
     const originalUsers = [...users];
-    const newUser = { id: 0, name: "New User" };
+    const newUser = { id: users.length + 1, name: "New User" };
     setUsers([newUser, ...users]);
 
-    apiClient
-      .post("/users", newUser)
-      .then((res) => setUsers([res.data, ...users]))
-      .catch((err) => {
-        setError(err.message);
-        setUsers(originalUsers);
-      });
+    userService.addUser(newUser).catch((err) => {
+      setError(err.message);
+      setUsers(originalUsers);
+    });
   };
 
   const updateUser = (user: User) => {
@@ -79,14 +70,10 @@ function App() {
     const updatedUser = { ...user, name: user.name + "!" };
     setUsers(users.map((u) => (u.id === user.id ? updatedUser : u)));
 
-    apiClient
-      .patch("/users/" + user.id, {
-        name: "Updated User",
-      })
-      .catch((err) => {
-        setError(err.message);
-        setUsers(originalUsers);
-      });
+    userService.updateUser(updatedUser).catch((err) => {
+      setError(err.message);
+      setUsers(originalUsers);
+    });
   };
 
   const [category, setCategory] = useState("");
