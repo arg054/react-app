@@ -11,8 +11,8 @@ import Form from "./components/Form";
 import ExpenseForm from "./components/expense-tracker/components/ExpenseForm";
 import ExpenseList from "./components/expense-tracker/components/ExpenseList";
 import ProductList from "./components/ProductList";
-import axios, { CanceledError } from "axios";
 import { literal } from "zod";
+import apiClient, { CanceledError } from "./components/services/api-client";
 
 export const categiries = ["Groceries", "Entertainment", "Utilities"];
 
@@ -32,7 +32,7 @@ function App() {
     const controller = new AbortController();
 
     setLoading(true);
-    axios
+    apiClient
       .get<User[]>("https://jsonplaceholder.typicode.com/users", {
         signal: controller.signal,
       })
@@ -52,10 +52,37 @@ function App() {
   //delete function updating users, using an optimistic update
   const deleteUser = (user: User) => {
     const originalUsers = [...users];
-    setUsers(users.filter((user) => user.id !== user.id));
+    setUsers(users.filter((u) => u.id !== user.id));
 
-    axios
-      .delete("https://jsonplaceholder.typicode.com/users" + user.id)
+    apiClient.delete("/users/" + user.id).catch((err) => {
+      setError(err.message);
+      setUsers(originalUsers);
+    });
+  };
+
+  const addUser = () => {
+    const originalUsers = [...users];
+    const newUser = { id: 0, name: "New User" };
+    setUsers([newUser, ...users]);
+
+    apiClient
+      .post("/users", newUser)
+      .then((res) => setUsers([res.data, ...users]))
+      .catch((err) => {
+        setError(err.message);
+        setUsers(originalUsers);
+      });
+  };
+
+  const updateUser = (user: User) => {
+    const originalUsers = [...users];
+    const updatedUser = { ...user, name: user.name + "!" };
+    setUsers(users.map((u) => (u.id === user.id ? updatedUser : u)));
+
+    apiClient
+      .patch("/users/" + user.id, {
+        name: "Updated User",
+      })
       .catch((err) => {
         setError(err.message);
         setUsers(originalUsers);
@@ -169,6 +196,9 @@ function App() {
       <>
         {error && <p className="text-danger">{error}</p>}
         {isLoading && <div className="spinner-border"></div>}
+        <button className="btn btn-primary mb-3" onClick={addUser}>
+          Add
+        </button>
         <ul className="list-group">
           {users.map((user) => (
             <li
@@ -176,12 +206,20 @@ function App() {
               className="list-group-item d-flex justify-content-between"
             >
               {user.name}
-              <button
-                className="btn btn-outline-danger"
-                onClick={() => deleteUser(user)}
-              >
-                Delete
-              </button>
+              <div>
+                <button
+                  className="btn btn-outline-secondary mx-1"
+                  onClick={() => updateUser(user)}
+                >
+                  Update
+                </button>
+                <button
+                  className="btn btn-outline-danger"
+                  onClick={() => deleteUser(user)}
+                >
+                  Delete
+                </button>
+              </div>
             </li>
           ))}
         </ul>
