@@ -14,41 +14,19 @@ import ProductList from "./components/ProductList";
 import { literal } from "zod";
 import apiClient, { CanceledError } from "./components/services/apiClient";
 import userService, { User } from "./components/services/userService";
+import useUsers from "./components/hooks/useUsers";
 
 export const categiries = ["Groceries", "Entertainment", "Utilities"];
 
 function App() {
-  const [error, setError] = useState("");
-  const [users, setUsers] = useState<User[]>([]);
-  const [isLoading, setLoading] = useState(false);
-
-  //using effect hook to fetch data from the API
-  //always include an empty array as the second argument to prevent infinite loops
-  useEffect(() => {
-    const controller = new AbortController();
-
-    setLoading(true);
-    const { request, cancel } = userService.getAllUsers();
-    request
-      .then((response) => {
-        setUsers(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        if (err instanceof CanceledError) return;
-        setError(err.message);
-        setLoading(false);
-      });
-
-    return () => cancel();
-  }, []);
+  const { error, users, isLoading, setUsers, setError } = useUsers();
 
   //delete function updating users, using an optimistic update
   const deleteUser = (user: User) => {
     const originalUsers = [...users];
     setUsers(users.filter((u) => u.id !== user.id));
 
-    userService.deleteUser(user.id).catch((err) => {
+    userService.delete(user.id).catch((err) => {
       setError(err.message);
       setUsers(originalUsers);
     });
@@ -59,7 +37,7 @@ function App() {
     const newUser = { id: users.length + 1, name: "New User" };
     setUsers([newUser, ...users]);
 
-    userService.addUser(newUser).catch((err) => {
+    userService.add(newUser).catch((err) => {
       setError(err.message);
       setUsers(originalUsers);
     });
@@ -70,7 +48,7 @@ function App() {
     const updatedUser = { ...user, name: user.name + "!" };
     setUsers(users.map((u) => (u.id === user.id ? updatedUser : u)));
 
-    userService.updateUser(updatedUser).catch((err) => {
+    userService.update(updatedUser).catch((err) => {
       setError(err.message);
       setUsers(originalUsers);
     });
