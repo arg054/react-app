@@ -1,10 +1,32 @@
 import apiClient from "./apiClient";
 import { useState } from "react";
-import create from "./httpService";
 
 export interface User {
   id: number;
   name: string;
 }
 
-export default create("/users");
+class UserService {
+  getAllUsers() {
+    const controller = new AbortController();
+
+    const request = apiClient.get<User[]>("/users", {
+      signal: controller.signal,
+    });
+    return { request, cancel: () => controller.abort() };
+  }
+
+  deleteUser(id: number) {
+    return apiClient.delete("/users/" + id);
+  }
+
+  addUser(user: User) {
+    return apiClient.post("/users", user);
+  }
+
+  updateUser(user: User) {
+    return apiClient.patch("/users/" + user.id, user);
+  }
+}
+
+export default new UserService();
