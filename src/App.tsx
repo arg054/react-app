@@ -12,7 +12,7 @@ import ExpenseForm from "./components/expense-tracker/components/ExpenseForm";
 import ExpenseList from "./components/expense-tracker/components/ExpenseList";
 import ProductList from "./components/ProductList";
 import { literal } from "zod";
-import { CanceledError } from "./components/services/apiClient";
+import apiClient, { CanceledError } from "./components/services/apiClient";
 import userService, { User } from "./components/services/userService";
 
 export const categiries = ["Groceries", "Entertainment", "Utilities"];
